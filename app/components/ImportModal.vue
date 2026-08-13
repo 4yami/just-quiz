@@ -119,6 +119,11 @@ const handleImport = async () => {
         class="h-56 w-full resize-none rounded-xl border border-border bg-muted/30 p-4 font-mono text-xs leading-relaxed text-foreground placeholder:text-muted-foreground/50 focus:border-accent focus:bg-card focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2 focus:ring-offset-background"
       ></textarea>
 
+      <p class="flex items-center gap-2 text-xs text-muted-foreground">
+        <AppIcon name="lucide:info" class="h-3.5 w-3.5 shrink-0" />
+        Tip: in ChatGPT, tap “Copy code” on the JSON block — not “Copy message” — so no quotes or extra text are included.
+      </p>
+
       <div class="flex flex-wrap items-center gap-2">
         <button @click="loadSample" class="btn-ghost text-xs">
           Load sample

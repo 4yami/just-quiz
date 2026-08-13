@@ -40,7 +40,12 @@ Question count:
 - If the notes say how many questions to make, match that number.
 - Otherwise choose a sensible number yourself — enough to cover the main concepts.
 
-Reply with ONLY the JSON object — nothing before it, nothing after it. No code fence, no intro, no outro, no document, no commentary, no explanation.
+CRITICAL OUTPUT FORMAT:
+- Your reply must START with "{" and END with "}" — nothing before the opening brace and nothing after the closing brace.
+- Never wrap the JSON in quotation marks (no " around the object).
+- Never use code fences / triple backticks (no \`\`\`).
+- No markdown, no preamble like "Here is your quiz:", no outro, no commentary, no explanation.
+- Use only straight ASCII double quotes (") for JSON strings — never curly quotes (" ").
 
 Fill in your content using EXACTLY this structure:
 
@@ -58,4 +63,4 @@ If you cannot follow these instructions, reply with exactly: FAIL
 NOTES
 [PASTE YOUR NOTES HERE]
 
-Remember: your entire reply must be the JSON object and nothing else.`;
+Remember: your entire reply must be ONLY the JSON object, starting with { and ending with }, with no quotes, backticks, or extra text of any kind.`;
