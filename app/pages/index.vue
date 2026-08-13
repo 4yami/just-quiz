@@ -8,7 +8,9 @@ const { isSignedIn, isSaving, isLoading, signIn, saveAllToDrive, loadAllQuizzesF
 const quizzes = ref<Quiz[]>([]);
 const isImportOpen = ref(false);
 const isCreateMenuOpen = ref(false);
-const driveMessage = ref<{ type: 'success' | 'error'; text: string } | null>(null);
+const saveFeedback = ref(false);
+const loadFeedback = ref(false);
+const driveError = ref<string | null>(null);
 
 // --- Delete confirmation ---
 const quizToDelete = ref<Quiz | null>(null);
@@ -79,18 +81,24 @@ const cancelDelete = () => {
 
 // --- Google Drive actions ---
 
-const setDriveMessage = (type: 'success' | 'error', text: string) => {
-  driveMessage.value = { type, text };
-  setTimeout(() => (driveMessage.value = null), 4000);
+const flashFeedback = (which: 'save' | 'load') => {
+  if (which === 'save') {
+    saveFeedback.value = true;
+    setTimeout(() => (saveFeedback.value = false), 2000);
+  } else {
+    loadFeedback.value = true;
+    setTimeout(() => (loadFeedback.value = false), 2000);
+  }
 };
 
 const handleSaveAll = async () => {
   try {
     if (!isSignedIn.value) await signIn();
     await saveAllToDrive(quizzes.value);
-    setDriveMessage('success', 'All quizzes saved to Drive.');
+    driveError.value = null;
+    flashFeedback('save');
   } catch (err: any) {
-    setDriveMessage('error', err.message || 'Save failed.');
+    driveError.value = err.message || 'Save failed.';
   }
 };
 
@@ -100,7 +108,7 @@ const handleLoadAllFromDrive = async () => {
 
     const loaded = await loadAllQuizzesFromDrive();
     if (loaded.length === 0) {
-      setDriveMessage('error', 'No saved quizzes found in Drive.');
+      driveError.value = 'No saved quizzes found in Drive.';
       return;
     }
 
@@ -122,16 +130,17 @@ const handleLoadAllFromDrive = async () => {
     await loadQuizzes();
 
     if (created === 0 && updated === 0) {
-      setDriveMessage('error', `No valid quizzes were found in Drive${skipped > 0 ? ` (${skipped} quiz${skipped === 1 ? '' : 'zes'} skipped)` : ''}.`);
+      driveError.value = `No valid quizzes were found in Drive${skipped > 0 ? ` (${skipped} quiz${skipped === 1 ? '' : 'zes'} skipped)` : ''}.`;
     } else {
       const parts = [];
       if (created > 0) parts.push(`${created} new`);
       if (updated > 0) parts.push(`${updated} updated`);
       const summary = parts.join(', ');
-      setDriveMessage('success', `Loaded ${created + updated} quizzes from Drive (${summary})${skipped > 0 ? `, ${skipped} skipped` : ''}.`);
+      driveError.value = null;
+      flashFeedback('load');
     }
   } catch (err: any) {
-    setDriveMessage('error', err.message || 'Failed to load quizzes from Drive.');
+    driveError.value = err.message || 'Failed to load quizzes from Drive.';
   }
 };
 
@@ -173,67 +182,78 @@ onBeforeUnmount(() => {
           </p>
         </div>
 
-        <div class="flex flex-wrap items-center gap-2">
-          <!-- Secondary actions -->
-          <div class="flex h-10 items-center rounded-xl border border-border bg-card p-1 shadow-sm">
-            <!-- Save -->
-            <button @click="handleSaveAll" :disabled="isSaving"
-              class="inline-flex h-8 items-center gap-1.5 rounded-lg px-3 text-sm font-medium text-muted-foreground transition-all duration-200 hover:bg-muted hover:text-foreground active:scale-[0.97] disabled:cursor-not-allowed disabled:opacity-50"
-              title="Save all quizzes to Drive">
-              <AppIcon name="lucide:upload" class="h-4 w-4" :stroke-width="2.5" />
-              <span>{{ isSaving ? 'Saving...' : 'Save Files' }}</span>
-            </button>
-
-            <span class="h-5 w-px bg-border" aria-hidden="true" />
-
-            <!-- Load -->
-            <button @click="handleLoadAllFromDrive" :disabled="isLoading"
-              class="inline-flex h-8 items-center gap-1.5 rounded-lg px-3 text-sm font-medium text-muted-foreground transition-all duration-200 hover:bg-muted hover:text-foreground active:scale-[0.97] disabled:cursor-not-allowed disabled:opacity-50"
-              title="Load quizzes from Drive">
-              <AppIcon name="lucide:download" class="h-4 w-4" :stroke-width="2.5" />
-              <span>{{ isLoading ? 'Loading...' : 'Load Files' }}</span>
-            </button>
-          </div>
-
-          <!-- Create New dropdown -->
-          <div class="relative" data-create-menu>
-            <button @click="isCreateMenuOpen = !isCreateMenuOpen" :aria-expanded="isCreateMenuOpen"
-              class="group inline-flex h-10 items-center gap-2 rounded-xl bg-gradient-accent pl-4 pr-2.5 text-sm font-semibold text-white shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:brightness-110 hover:shadow-accent active:translate-y-0 active:scale-[0.98]">
-              <AppIcon name="lucide:plus" class="h-4 w-4 transition-transform duration-200 group-hover:rotate-90"
-                :class="{ 'rotate-90': isCreateMenuOpen }" :stroke-width="2.5" />
-              <span>Create New</span>
-              <AppIcon name="lucide:chevron-down" class="ml-1 h-3.5 w-3.5 transition-transform duration-200"
-                :class="{ 'rotate-180': isCreateMenuOpen }" :stroke-width="2.5" />
-            </button>
-
-            <!-- Dropdown -->
-            <div v-if="isCreateMenuOpen"
-              class="absolute right-0 z-50 mt-2 w-72 overflow-hidden rounded-xl border border-border bg-card p-1.5 shadow-xl">
-              <button @click="isImportOpen = true; isCreateMenuOpen = false"
-                class="flex w-full items-start gap-3 rounded-lg px-3 py-3 text-left transition-colors hover:bg-muted">
-                <span class="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-accent/10 text-accent">
-                  <AppIcon name="lucide:download" class="h-4 w-4" />
-                </span>
-                <span>
-                  <span class="block text-sm font-semibold text-foreground">From AI</span>
-                  <span class="block text-xs text-muted-foreground">Paste AI-generated JSON</span>
-                </span>
+        <div class="flex flex-col items-end gap-2">
+          <div class="flex flex-wrap items-center gap-2">
+            <!-- Secondary actions -->
+            <div class="flex h-10 items-center rounded-xl border border-border bg-card p-1 shadow-sm">
+              <!-- Save -->
+              <button @click="handleSaveAll" :disabled="isSaving"
+                class="inline-flex h-8 items-center gap-1.5 rounded-lg px-3 text-sm font-medium text-muted-foreground transition-all duration-200 hover:bg-muted hover:text-foreground active:scale-[0.97] disabled:cursor-not-allowed disabled:opacity-50"
+                :class="saveFeedback ? '!text-green-600 dark:!text-green-400' : ''"
+                title="Save all quizzes to Drive">
+                <AppIcon :name="saveFeedback ? 'lucide:check' : 'lucide:upload'" class="h-4 w-4" :stroke-width="2.5" />
+                <span>{{ isSaving ? 'Saving...' : saveFeedback ? 'Saved!' : 'Save Files' }}</span>
               </button>
 
-              <div class="mx-4 my-1.5 h-px bg-border" aria-hidden="true" />
+              <span class="h-5 w-px bg-border" aria-hidden="true" />
 
-              <button @click="navigateTo('/quiz/new')"
-                class="flex w-full items-start gap-3 rounded-lg px-3 py-3 text-left transition-colors hover:bg-muted">
-                <span class="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-accent/10 text-accent">
-                  <AppIcon name="lucide:edit-3" class="h-4 w-4" />
-                </span>
-                <span>
-                  <span class="block text-sm font-semibold text-foreground">With Editor</span>
-                  <span class="block text-xs text-muted-foreground">Build quiz step-by-step</span>
-                </span>
+              <!-- Load -->
+              <button @click="handleLoadAllFromDrive" :disabled="isLoading"
+                class="inline-flex h-8 items-center gap-1.5 rounded-lg px-3 text-sm font-medium text-muted-foreground transition-all duration-200 hover:bg-muted hover:text-foreground active:scale-[0.97] disabled:cursor-not-allowed disabled:opacity-50"
+                :class="loadFeedback ? '!text-green-600 dark:!text-green-400' : ''"
+                title="Load quizzes from Drive">
+                <AppIcon :name="loadFeedback ? 'lucide:check' : 'lucide:download'" class="h-4 w-4" :stroke-width="2.5" />
+                <span>{{ isLoading ? 'Loading...' : loadFeedback ? 'Loaded!' : 'Load Files' }}</span>
               </button>
             </div>
+
+            <!-- Create New dropdown -->
+            <div class="relative" data-create-menu>
+              <button @click="isCreateMenuOpen = !isCreateMenuOpen" :aria-expanded="isCreateMenuOpen"
+                class="group inline-flex h-10 items-center gap-2 rounded-xl bg-gradient-accent pl-4 pr-2.5 text-sm font-semibold text-white shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:brightness-110 hover:shadow-accent active:translate-y-0 active:scale-[0.98]">
+                <AppIcon name="lucide:plus" class="h-4 w-4 transition-transform duration-200 group-hover:rotate-90"
+                  :class="{ 'rotate-90': isCreateMenuOpen }" :stroke-width="2.5" />
+                <span>Create New</span>
+                <AppIcon name="lucide:chevron-down" class="ml-1 h-3.5 w-3.5 transition-transform duration-200"
+                  :class="{ 'rotate-180': isCreateMenuOpen }" :stroke-width="2.5" />
+              </button>
+
+              <!-- Dropdown -->
+              <div v-if="isCreateMenuOpen"
+                class="absolute right-0 z-50 mt-2 w-72 overflow-hidden rounded-xl border border-border bg-card p-1.5 shadow-xl">
+                <button @click="isImportOpen = true; isCreateMenuOpen = false"
+                  class="flex w-full items-start gap-3 rounded-lg px-3 py-3 text-left transition-colors hover:bg-muted">
+                  <span class="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-accent/10 text-accent">
+                    <AppIcon name="lucide:download" class="h-4 w-4" />
+                  </span>
+                  <span>
+                    <span class="block text-sm font-semibold text-foreground">From AI</span>
+                    <span class="block text-xs text-muted-foreground">Paste AI-generated JSON</span>
+                  </span>
+                </button>
+
+                <div class="mx-4 my-1.5 h-px bg-border" aria-hidden="true" />
+
+                <button @click="navigateTo('/quiz/new')"
+                  class="flex w-full items-start gap-3 rounded-lg px-3 py-3 text-left transition-colors hover:bg-muted">
+                  <span class="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-accent/10 text-accent">
+                    <AppIcon name="lucide:edit-3" class="h-4 w-4" />
+                  </span>
+                  <span>
+                    <span class="block text-sm font-semibold text-foreground">With Editor</span>
+                    <span class="block text-xs text-muted-foreground">Build quiz step-by-step</span>
+                  </span>
+                </button>
+              </div>
+            </div>
+
           </div>
+
+          <!-- Drive error -->
+          <p v-if="driveError" class="alert-error inline-flex max-w-sm items-start gap-2 px-3 py-2.5 text-sm">
+            <AppIcon name="lucide:info" class="mt-0.5 h-4 w-4 shrink-0" />
+            <span>{{ driveError }}</span>
+          </p>
         </div>
       </div>
     </div>
@@ -333,14 +353,6 @@ onBeforeUnmount(() => {
         No quizzes match your search. Try a different keyword.
       </p>
       <button @click="searchQuery = ''" class="btn-outline mt-6">Clear search</button>
-    </div>
-
-    <!-- Drive message -->
-    <div v-if="driveMessage"
-      class="fixed bottom-4 left-1/2 z-50 -translate-x-1/2 border p-4 text-sm shadow-lg" :class="driveMessage.type === 'success'
-        ? 'alert-success'
-        : 'alert-error'">
-      {{ driveMessage.text }}
     </div>
 
     <!-- Delete confirmation -->
