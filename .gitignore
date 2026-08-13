@@ -1,0 +1,32 @@
+# Nuxt dev/build outputs
+.output
+.data
+.nuxt
+.nitro
+.cache
+dist
+
+# Node dependencies
+node_modules
+
+# Logs
+logs
+*.log
+
+# Misc
+.DS_Store
+.fleet
+.idea
+
+# Project documentation (not committed)
+UI.md
+PLAN.md
+FUTURE_PLAN.md
+
+# Local env files
+.env
+.env.*
+!.env.example
+
+# Google OAuth credentials (client secret — never commit)
+client_secret_*.json

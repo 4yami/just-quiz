@@ -1,0 +1,206 @@
+/* app/assets/css/main.css */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Light theme (default) */
+    --background: 250 250 250;       /* #FAFAFA */
+    --foreground: 15 23 42;          /* #0F172A */
+    --muted: 241 245 249;            /* #F1F5F9 */
+    --muted-foreground: 100 116 139; /* #64748B */
+    --accent: 0 82 255;              /* #0052FF */
+    --accent-secondary: 77 124 255;  /* #4D7CFF */
+    --accent-foreground: 255 255 255;
+    --border: 226 232 240;           /* #E2E8F0 */
+    --card: 255 255 255;             /* #FFFFFF */
+    --ring: 0 82 255;                /* #0052FF */
+    --accent-rgb: 0 82 255;
+    /* Inverted section colors (theme-independent) */
+    --inverted-bg: 15 23 42;         /* #0F172A */
+    --inverted-fg: 250 250 250;      /* #FAFAFA */
+  }
+
+  .dark {
+    /* Dark theme */
+    --background: 11 17 32;          /* #0B1120 */
+    --foreground: 241 245 249;       /* #F1F5F9 */
+    --muted: 30 41 59;               /* #1E293B */
+    --muted-foreground: 148 163 184; /* #94A3B8 */
+    --accent: 59 130 246;            /* #3B82F6 */
+    --accent-secondary: 96 165 250;  /* #60A5FA */
+    --accent-foreground: 255 255 255;
+    --border: 30 41 59;              /* #1E293B */
+    --card: 17 24 39;                /* #111827 */
+    --ring: 59 130 246;              /* #3B82F6 */
+    --accent-rgb: 59 130 246;
+    /* Inverted section colors stay the same in dark mode */
+    --inverted-bg: 15 23 42;         /* #0F172A */
+    --inverted-fg: 250 250 250;      /* #FAFAFA */
+  }
+
+  html {
+    font-family: 'Inter', system-ui, sans-serif;
+    overflow-x: clip;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+    overflow-x: hidden;
+  }
+
+  ::selection {
+    @apply bg-accent/20 text-foreground;
+  }
+
+  /* Smooth theme transition (respects reduced-motion) */
+  html.theme-transition,
+  html.theme-transition *,
+  html.theme-transition *::before,
+  html.theme-transition *::after {
+    transition:
+      background-color 0.25s ease,
+      border-color 0.25s ease,
+      color 0.25s ease,
+      fill 0.25s ease,
+      box-shadow 0.25s ease !important;
+  }
+}
+
+@layer components {
+  /* Gradient text highlight */
+  .gradient-text {
+    @apply bg-gradient-to-r from-accent to-accent-secondary bg-clip-text text-transparent;
+  }
+
+  /* Section label badge with pulsing dot */
+  .section-label {
+    @apply inline-flex items-center gap-3 rounded-full border border-accent/30 bg-accent/5 px-5 py-2;
+  }
+
+  .section-label-dot {
+    @apply h-2 w-2 rounded-full bg-accent animate-pulse-dot;
+  }
+
+  /* Primary gradient button */
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-accent to-accent-secondary px-6 py-3 text-sm font-medium text-white shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:brightness-110 hover:shadow-accent-lg active:scale-[0.98] disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:translate-y-0 disabled:hover:shadow-sm;
+  }
+
+  /* Outline button */
+  .btn-outline {
+    @apply inline-flex items-center justify-center gap-2 rounded-xl border border-border bg-transparent px-6 py-3 text-sm font-medium text-foreground transition-all duration-200 hover:-translate-y-0.5 hover:border-accent/30 hover:shadow-md active:scale-[0.98] disabled:opacity-40 disabled:cursor-not-allowed;
+  }
+
+  /* Ghost button */
+  .btn-ghost {
+    @apply inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2 text-sm font-medium text-muted-foreground transition-all duration-200 hover:bg-muted hover:text-foreground active:scale-[0.98];
+  }
+
+  /* Danger button */
+  .btn-danger {
+    @apply inline-flex items-center justify-center gap-2 rounded-xl bg-red-500 px-6 py-3 text-sm font-medium text-white shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:bg-red-600 active:scale-[0.98] disabled:opacity-40 disabled:cursor-not-allowed;
+  }
+
+  /* Segmented action bar */
+  .action-bar {
+    @apply inline-flex flex-wrap items-center gap-0.5 rounded-xl border border-border bg-card p-1 shadow-sm;
+  }
+
+  .action-bar-divider {
+    @apply hidden h-5 w-px bg-border sm:block;
+  }
+
+  .btn-segment {
+    @apply inline-flex items-center justify-center gap-1.5 rounded-lg px-3 py-2 text-sm font-medium text-muted-foreground transition-all duration-200 hover:bg-muted hover:text-foreground active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:bg-transparent disabled:hover:text-muted-foreground;
+  }
+
+  /* Create button inside the segmented action bar */
+  .btn-create {
+    @apply inline-flex items-center justify-center gap-1.5 rounded-lg bg-gradient-to-r from-accent to-accent-secondary px-3 py-2 text-sm font-medium text-white transition-all duration-200 hover:brightness-110 active:scale-[0.98];
+  }
+
+  /* Card surface */
+  .card-surface {
+    @apply rounded-xl border border-border bg-card shadow-md transition-all duration-300 hover:shadow-xl;
+  }
+
+  /* Elevated card with gradient border */
+  .card-gradient-border {
+    @apply rounded-xl bg-gradient-to-br from-accent via-accent-secondary to-accent p-[2px] shadow-accent;
+  }
+
+  .card-gradient-border-inner {
+    @apply h-full w-full rounded-[calc(12px-2px)] bg-card;
+  }
+
+  /* Dot pattern texture for inverted sections */
+  .dot-pattern {
+    background-image: radial-gradient(circle, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+    background-size: 32px 32px;
+  }
+
+  .dark .dot-pattern {
+    background-image: radial-gradient(circle, rgba(255, 255, 255, 0.08) 1px, transparent 1px);
+  }
+
+  /* Radial glow for section backgrounds */
+  .glow-accent {
+    background: radial-gradient(circle, rgba(0, 82, 255, 0.06), transparent 70%);
+  }
+
+  .dark .glow-accent {
+    background: radial-gradient(circle, rgba(59, 130, 246, 0.08), transparent 70%);
+  }
+
+  /* Success alert banner (light + dark) */
+  .alert-success {
+    @apply rounded-xl border border-green-200 bg-green-50 text-green-800 dark:border-green-500/30 dark:bg-green-500/10 dark:text-green-400;
+  }
+
+  /* Error alert banner (light + dark) */
+  .alert-error {
+    @apply rounded-xl border border-red-200 bg-red-50 text-red-700 dark:border-red-500/30 dark:bg-red-500/10 dark:text-red-400;
+  }
+}
+
+/* Entrance animation with stagger */
+.fade-up {
+  @apply animate-fade-up;
+}
+
+.fade-up-delay-1 {
+  @apply animate-fade-up;
+  animation-delay: 0.1s;
+}
+
+.fade-up-delay-2 {
+  @apply animate-fade-up;
+  animation-delay: 0.2s;
+}
+
+.fade-up-delay-3 {
+  @apply animate-fade-up;
+  animation-delay: 0.3s;
+}
+
+/* Respect reduced motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  html.theme-transition,
+  html.theme-transition *,
+  html.theme-transition *::before,
+  html.theme-transition *::after {
+    transition: none !important;
+  }
+}
