@@ -11,6 +11,14 @@ export default defineNuxtConfig({
   // All data lives in the browser (IndexedDB) + Google Drive.
   ssr: false,
   modules: ['@nuxtjs/tailwindcss', '@vite-pwa/nuxt', '@nuxt/icon'],
+  nitro: {
+    // Force the "static" preset so `nuxt generate` emits a real index.html
+    // (otherwise Nuxt 4 produces a node-server bundle with no prerendered HTML).
+    preset: 'static',
+    prerender: {
+      routes: ['/'],
+    },
+  },
   icon: {
     serverBundle: {
       // Bundle icons at build time so the PWA works offline
@@ -59,6 +67,10 @@ export default defineNuxtConfig({
       ],
       link: [
         {
+          rel: 'manifest',
+          href: `${baseURL}manifest.webmanifest`,
+        },
+        {
           rel: 'icon',
           href: `${baseURL}favicon.ico?v=5`,
           sizes: 'any',
@@ -97,20 +109,22 @@ export default defineNuxtConfig({
       theme_color: '#0F172A',
       background_color: '#FAFAFA',
       display: 'standalone',
-      start_url: '/',
+      // baseURL is '/' in dev and '/just-quiz/' on GitHub Pages — start_url
+      // must point into the deployed sub-path so the PWA launches correctly.
+      start_url: baseURL,
       icons: [
         {
-          src: '/pwa-192.png',
+          src: `${baseURL}pwa-192.png`,
           sizes: '192x192',
           type: 'image/png',
         },
         {
-          src: '/pwa-512.png',
+          src: `${baseURL}pwa-512.png`,
           sizes: '512x512',
           type: 'image/png',
         },
         {
-          src: '/pwa-512.png',
+          src: `${baseURL}pwa-512.png`,
           sizes: '512x512',
           type: 'image/png',
           purpose: 'any maskable',
