@@ -183,12 +183,12 @@ onBeforeUnmount(() => {
         </div>
 
         <div class="flex flex-col items-end gap-2">
-          <div class="flex flex-wrap items-center gap-2">
+          <div class="flex w-full flex-col gap-2 sm:flex-row sm:items-center sm:justify-end">
             <!-- Secondary actions -->
-            <div class="flex h-10 items-center rounded-xl border border-border bg-card p-1 shadow-sm">
+            <div class="flex h-10 w-full items-center rounded-xl border border-border bg-card p-1 shadow-sm sm:w-auto">
               <!-- Save -->
               <button @click="handleSaveAll" :disabled="isSaving"
-                class="inline-flex h-8 items-center gap-1.5 rounded-lg px-3 text-sm font-medium text-muted-foreground transition-all duration-200 hover:bg-muted hover:text-foreground active:scale-[0.97] disabled:cursor-not-allowed disabled:opacity-50"
+                class="inline-flex h-8 flex-1 items-center justify-center gap-1.5 rounded-lg px-3 text-sm font-medium text-muted-foreground transition-all duration-200 hover:bg-muted hover:text-foreground active:scale-[0.97] disabled:cursor-not-allowed disabled:opacity-50 sm:flex-none"
                 :class="saveFeedback ? '!text-green-600 dark:!text-green-400' : ''"
                 title="Save all quizzes to Drive">
                 <AppIcon :name="saveFeedback ? 'lucide:check' : 'lucide:upload'" class="h-4 w-4" :stroke-width="2.5" />
@@ -199,7 +199,7 @@ onBeforeUnmount(() => {
 
               <!-- Load -->
               <button @click="handleLoadAllFromDrive" :disabled="isLoading"
-                class="inline-flex h-8 items-center gap-1.5 rounded-lg px-3 text-sm font-medium text-muted-foreground transition-all duration-200 hover:bg-muted hover:text-foreground active:scale-[0.97] disabled:cursor-not-allowed disabled:opacity-50"
+                class="inline-flex h-8 flex-1 items-center justify-center gap-1.5 rounded-lg px-3 text-sm font-medium text-muted-foreground transition-all duration-200 hover:bg-muted hover:text-foreground active:scale-[0.97] disabled:cursor-not-allowed disabled:opacity-50 sm:flex-none"
                 :class="loadFeedback ? '!text-green-600 dark:!text-green-400' : ''"
                 title="Load quizzes from Drive">
                 <AppIcon :name="loadFeedback ? 'lucide:check' : 'lucide:download'" class="h-4 w-4" :stroke-width="2.5" />
@@ -208,9 +208,9 @@ onBeforeUnmount(() => {
             </div>
 
             <!-- Create New dropdown -->
-            <div class="relative" data-create-menu>
+            <div class="relative w-full sm:w-auto" data-create-menu>
               <button @click="isCreateMenuOpen = !isCreateMenuOpen" :aria-expanded="isCreateMenuOpen"
-                class="group inline-flex h-10 items-center gap-2 rounded-xl bg-gradient-accent pl-4 pr-2.5 text-sm font-semibold text-white shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:brightness-110 hover:shadow-accent active:translate-y-0 active:scale-[0.98]">
+                class="group inline-flex h-10 w-full items-center justify-center gap-2 rounded-xl bg-gradient-accent px-4 text-sm font-semibold text-white shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:brightness-110 hover:shadow-accent active:translate-y-0 active:scale-[0.98] sm:w-auto sm:justify-start sm:pl-4 sm:pr-2.5">
                 <AppIcon name="lucide:plus" class="h-4 w-4 transition-transform duration-200 group-hover:rotate-90"
                   :class="{ 'rotate-90': isCreateMenuOpen }" :stroke-width="2.5" />
                 <span>Create New</span>
@@ -220,7 +220,7 @@ onBeforeUnmount(() => {
 
               <!-- Dropdown -->
               <div v-if="isCreateMenuOpen"
-                class="absolute right-0 z-50 mt-2 w-72 overflow-hidden rounded-xl border border-border bg-card p-1.5 shadow-xl">
+                class="absolute left-0 right-0 z-50 mx-auto mt-2 w-72 max-w-[calc(100vw-2rem)] overflow-hidden rounded-xl border border-border bg-card p-1.5 shadow-xl sm:left-auto sm:mx-0">
                 <button @click="isImportOpen = true; isCreateMenuOpen = false"
                   class="flex w-full items-start gap-3 rounded-lg px-3 py-3 text-left transition-colors hover:bg-muted">
                   <span class="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-accent/10 text-accent">
