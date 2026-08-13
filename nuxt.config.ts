@@ -1,8 +1,12 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 
 // GitHub Pages serves the site from a sub-path like /just-quiz/
-// Set via env in CI (e.g. NUXT_APP_BASE_URL=/${{ github.event.repository.name }}/)
-const baseURL = process.env.NUXT_APP_BASE_URL || '/';
+// Set via env in CI (e.g. NUXT_APP_BASE_URL=${{ steps.pages.outputs.base_path }})
+// NOTE: configure-pages outputs a path WITHOUT a trailing slash (e.g. /just-quiz).
+// We normalize it here so string concatenation below (`${baseURL}manifest.webmanifest`)
+// produces valid URLs like /just-quiz/manifest.webmanifest instead of /just-quizmanifest.webmanifest.
+const rawBaseURL = process.env.NUXT_APP_BASE_URL || '/';
+const baseURL = rawBaseURL.endsWith('/') ? rawBaseURL : `${rawBaseURL}/`;
 
 export default defineNuxtConfig({
   compatibilityDate: '2025-07-15',
