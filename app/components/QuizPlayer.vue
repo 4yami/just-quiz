@@ -1,10 +1,13 @@
 <!-- app/components/QuizPlayer.vue -->
 <script setup lang="ts">
 import type { Quiz, Question } from '~/types/quiz';
+import { useQuizSession, type QuizSession } from '~/composables/useQuizSession';
 
 const props = defineProps<{
     quiz: Quiz;
 }>();
+
+const { saveSession, clearSession, getSession } = useQuizSession();
 
 const currentIndex = ref(0);
 const isFinished = ref(false);
@@ -15,6 +18,46 @@ const isChecked = ref(false);
 // multiple: number[] (array of choice indices)
 // short_answer: string
 const userAnswers = ref<Record<number, any>>({});
+
+const quizId = computed(() => props.quiz.id);
+const quizUrl = computed(() => getQuizUrl(props.quiz));
+
+// Build the current session snapshot.
+const buildSession = (): QuizSession => ({
+    quizId: quizId.value,
+    quizUrl: quizUrl.value,
+    quizTitle: props.quiz.title,
+    currentIndex: currentIndex.value,
+    totalQuestions: totalQuestions.value,
+    userAnswers: { ...userAnswers.value },
+    isChecked: isChecked.value,
+    isFinished: isFinished.value,
+    updatedAt: Date.now(),
+});
+
+// Persist the current state to the session store (module state + sessionStorage).
+const persistSession = () => {
+    saveSession(buildSession());
+};
+
+// Restore a previously saved session (navigation back or page refresh).
+const restoreSession = () => {
+    const session = getSession(quizId.value);
+    // Guard against restoring a stale session for a different quiz at the same URL.
+    if (session && session.quizUrl === quizUrl.value) {
+        currentIndex.value = Math.min(session.currentIndex, props.quiz.questions.length - 1);
+        userAnswers.value = session.userAnswers ?? {};
+        isChecked.value = session.isChecked ?? false;
+        isFinished.value = session.isFinished ?? false;
+    }
+};
+
+onMounted(() => {
+    restoreSession();
+});
+
+// Auto-save whenever an answer changes.
+watch(userAnswers, persistSession, { deep: true });
 
 const currentQuestion = computed(() => props.quiz.questions[currentIndex.value]);
 const totalQuestions = computed(() => props.quiz.questions.length);
@@ -104,6 +147,7 @@ const getCorrectAnswerText = (q: Question): string => {
 const checkAnswer = () => {
     if (!isCurrentQuestionAnswered.value) return;
     isChecked.value = true;
+    persistSession();
 };
 
 // Check if a specific question was answered correctly
@@ -140,10 +184,13 @@ const score = computed(() => {
 const handleNext = () => {
     if (currentIndex.value < totalQuestions.value - 1) {
         currentIndex.value++;
+        isChecked.value = false;
+        persistSession();
     } else {
         isFinished.value = true;
+        isChecked.value = false;
+        clearSession(quizId.value);
     }
-    isChecked.value = false;
 };
 
 const handlePrev = () => {
@@ -151,6 +198,7 @@ const handlePrev = () => {
         currentIndex.value--;
     }
     isChecked.value = false;
+    persistSession();
 };
 
 const restartQuiz = () => {
@@ -158,6 +206,20 @@ const restartQuiz = () => {
     currentIndex.value = 0;
     isFinished.value = false;
     isChecked.value = false;
+    persistSession();
+};
+
+// --- Exit quiz ---
+const showExitConfirm = ref(false);
+
+const confirmExit = () => {
+    clearSession(quizId.value);
+    showExitConfirm.value = false;
+    navigateTo('/');
+};
+
+const cancelExit = () => {
+    showExitConfirm.value = false;
 };
 </script>
 
@@ -222,9 +284,16 @@ const restartQuiz = () => {
         <div v-else class="card-surface p-6 sm:p-8">
             <!-- Progress Bar & Question Counter -->
             <div class="space-y-2">
-                <div class="flex justify-between text-xs font-medium text-muted-foreground">
+                <div class="flex items-center justify-between gap-3 text-xs font-medium text-muted-foreground">
                     <span>Question {{ currentIndex + 1 }} of {{ totalQuestions }}</span>
-                    <span>{{ progressPercent }}% Completed</span>
+                    <div class="flex items-center gap-3">
+                        <span>{{ progressPercent }}% Completed</span>
+                        <button @click="showExitConfirm = true" title="Exit quiz"
+                            class="inline-flex items-center gap-1 rounded-lg border border-border bg-card px-2.5 py-1.5 text-muted-foreground transition-all duration-200 hover:bg-muted hover:text-foreground active:scale-[0.97]">
+                            <AppIcon name="lucide:x" class="h-3.5 w-3.5" :stroke-width="2.5" />
+                            Exit
+                        </button>
+                    </div>
                 </div>
                 <div class="h-2 w-full overflow-hidden rounded-full bg-muted">
                     <div class="h-full rounded-full bg-gradient-accent transition-all duration-500 ease-out"
@@ -331,5 +400,14 @@ const restartQuiz = () => {
                 </button>
             </div>
         </div>
+
+        <!-- Exit Quiz Confirmation -->
+        <ConfirmDialog v-if="showExitConfirm"
+            title="Exit quiz?"
+            message="Your progress will be saved so you can continue later. Do you want to exit this quiz?"
+            confirm-label="Exit Quiz"
+            cancel-label="Stay"
+            @confirm="confirmExit"
+            @cancel="cancelExit" />
     </div>
 </template>

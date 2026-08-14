@@ -1,8 +1,11 @@
 <!-- app/components/AppHeader.vue -->
 <script setup lang="ts">
+import type { QuizSession } from '~/composables/useQuizSession';
+
 const isMenuOpen = ref(false);
 const route = useRoute();
 const { mode, toggleMode } = useColorMode();
+const { sessions } = useQuizSession();
 
 const navLinks = [
     { label: 'About', to: '/about' },
@@ -16,6 +19,15 @@ const closeMenu = () => {
 };
 
 watch(() => route.fullPath, closeMenu);
+
+// Most recently active quiz session, used for the "Resume quiz" pill.
+// Hidden on quiz pages themselves — the player is already visible there.
+const activeSession = computed<QuizSession | null>(() => {
+    if (route.path.startsWith('/quiz/')) return null;
+    const all = Object.values(sessions.value);
+    if (all.length === 0) return null;
+    return all.reduce<QuizSession>((latest, s) => (s.updatedAt > latest.updatedAt ? s : latest), all[0]!);
+});
 </script>
 
 <template>
@@ -62,6 +74,27 @@ watch(() => route.fullPath, closeMenu);
                     <AppIcon v-else name="lucide:x" class="h-6 w-6" />
                 </button>
             </div>
+        </div>
+
+        <!-- Resume Quiz Banner -->
+        <div v-if="activeSession"
+            class="cursor-pointer border-t border-accent/20 bg-accent/5 transition-colors duration-200 hover:bg-accent/10">
+            <NuxtLink :to="activeSession.quizUrl" @click="closeMenu"
+                class="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-2 sm:px-6">
+                <span class="flex items-center gap-2 text-xs font-medium text-foreground sm:text-sm">
+                    <span class="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-gradient-accent text-white">
+                        <AppIcon name="lucide:play" class="h-3 w-3" :stroke-width="2.5" />
+                    </span>
+                    <span class="min-w-0">
+                        <span class="font-semibold text-accent">Resume quiz:</span>
+                        <span class="ml-1.5 truncate">{{ activeSession.quizTitle }}</span>
+                    </span>
+                </span>
+                <span class="flex shrink-0 items-center gap-2 text-xs text-muted-foreground">
+                    <span>Question {{ activeSession.currentIndex + 1 }} of {{ activeSession.totalQuestions }}</span>
+                    <AppIcon name="lucide:arrow-right" class="h-3.5 w-3.5" :stroke-width="2.5" />
+                </span>
+            </NuxtLink>
         </div>
 
         <!-- Mobile Menu -->

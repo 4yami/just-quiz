@@ -11,10 +11,14 @@ const isLoading = ref(true);
 onMounted(async () => {
   const slugParam = route.params.slug as string;
   const shortId = extractShortId(slugParam);
-  
+  const { clearSessionBySlug } = useQuizSession();
+
   const foundQuiz = await getQuizByShortId(shortId);
   if (foundQuiz) {
     quiz.value = foundQuiz;
+  } else {
+    // The quiz no longer exists — drop any stale session pointing at this URL.
+    clearSessionBySlug(slugParam);
   }
   isLoading.value = false;
 });
