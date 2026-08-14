@@ -13,13 +13,13 @@ const showIOSModal = ref(false);
 /**
  * When installation is possible (install prompt available, or iOS instructions),
  * show an install label — either the caller's override (e.g. "Install JustQuiz"
- * in the header) or the default "Install App".
+ * in the header) or the default "Install JustQuiz".
  * Everywhere else — desktop, already installed, or prompt not ready yet —
  * show "Launch JustQuiz".
  */
 const label = computed(() => {
   if (canInstall.value || showIOSInstructions.value) {
-    return props.label || 'Install App';
+    return props.label || 'Install JustQuiz';
   }
   return 'Launch JustQuiz';
 });

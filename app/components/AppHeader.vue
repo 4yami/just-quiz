@@ -40,6 +40,8 @@ watch(() => route.fullPath, closeMenu);
                         : 'text-muted-foreground hover:bg-muted hover:text-foreground'">
                     {{ link.label }}
                 </NuxtLink>
+                <!-- Install / Launch CTA (visible at tablet/desktop widths) -->
+                <LaunchAppButton label="Install JustQuiz" class="ml-2" />
             </nav>
 
             <!-- Right side: theme toggle + mobile menu button -->

@@ -64,7 +64,7 @@ const steps = [
                     </p>
 
                     <div class="flex flex-col gap-4 sm:flex-row fade-up-delay-3">
-                        <LaunchAppButton class="h-12 px-8 text-base" />
+                        <LaunchAppButton label="Install JustQuiz" class="h-12 px-8 text-base" />
                         <a href="#how-it-works" class="btn-outline h-12 px-8 text-base">
                             How it works
                         </a>
@@ -204,7 +204,7 @@ const steps = [
                     Import a quiz, play it offline, and see your score instantly. It takes less than a minute to start.
                 </p>
                 <div class="mt-8">
-                    <LaunchAppButton class="h-14 px-10 text-base" />
+                    <LaunchAppButton label="Install JustQuiz" class="h-14 px-10 text-base" />
                 </div>
             </div>
         </section>

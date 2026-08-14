@@ -17,14 +17,22 @@ const deferredPrompt = ref<BeforeInstallPromptEvent | null>(null);
 const hasPromptEvent = ref(false);
 const isInstalled = ref(false);
 
-const isMobile = () => {
-  if (import.meta.server) return false;
-  return /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent);
-};
-
 const isIOS = () => {
   if (import.meta.server) return false;
-  return /iPhone|iPad|iPod/i.test(navigator.userAgent);
+  const ua = navigator.userAgent;
+  // iPhone / iPad / iPod classic UA
+  if (/iPhone|iPad|iPod/i.test(ua)) return true;
+  // Modern iPadOS 13+ reports a Macintosh UA — detect via touch points
+  return (
+    /Macintosh/i.test(ua) &&
+    /MacIntel/i.test(navigator.platform) &&
+    navigator.maxTouchPoints > 1
+  );
+};
+
+const isMobile = () => {
+  if (import.meta.server) return false;
+  return isIOS() || /Android|Mobile/i.test(navigator.userAgent);
 };
 
 const isStandalone = () => {
