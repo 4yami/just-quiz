@@ -32,6 +32,49 @@ const progressPercent = computed(() => {
     return Math.round(((currentIndex.value + answered) / totalQuestions.value) * 100);
 });
 
+// Question type display metadata (badge label, hint, icon, colors)
+const TYPE_META = {
+    single: {
+        label: 'Single Answer',
+        hint: 'Select one answer.',
+        icon: 'lucide:circle-check',
+        badgeClass: 'bg-accent/10 text-accent',
+    },
+    multiple: {
+        label: 'Multiple Answers',
+        hint: 'Select all that apply.',
+        icon: 'lucide:list-checks',
+        badgeClass: 'bg-accent/10 text-accent',
+    },
+    true_false: {
+        label: 'True or False',
+        hint: 'Select true or false.',
+        icon: 'lucide:check-check',
+        badgeClass: 'bg-amber-500/10 text-amber-600 dark:text-amber-400',
+    },
+    short_answer: {
+        label: 'Short Answer',
+        hint: 'Type your answer.',
+        icon: 'lucide:type',
+        badgeClass: 'bg-muted text-muted-foreground',
+    },
+};
+
+const DEFAULT_TYPE_META = {
+    label: 'Question',
+    hint: '',
+    icon: 'lucide:help-circle',
+    badgeClass: 'bg-muted text-muted-foreground',
+};
+
+// Returns display metadata for any given question (falls back gracefully)
+const getTypeMeta = (q?: Question) => {
+    if (!q) return DEFAULT_TYPE_META;
+    return TYPE_META[q.type] ?? DEFAULT_TYPE_META;
+};
+
+const currentTypeMeta = computed(() => getTypeMeta(currentQuestion.value));
+
 // Answer helpers
 const handleSingleSelect = (choiceIdx: number) => {
     userAnswers.value[currentIndex.value] = choiceIdx;
@@ -152,6 +195,12 @@ const restartQuiz = () => {
                             {{ isQuestionCorrect(q, idx) ? '✓ Correct' : '✗ Incorrect' }}
                         </span>
                     </div>
+                    <div class="mt-1.5">
+                        <span class="inline-flex items-center gap-1 rounded-full bg-muted px-2 py-0.5 text-[10px] font-medium text-muted-foreground">
+                            <AppIcon :name="getTypeMeta(q).icon" class="h-3 w-3" :stroke-width="2.5" />
+                            {{ getTypeMeta(q).label }}
+                        </span>
+                    </div>
                     <p v-if="q.explanation" class="mt-2 text-xs text-muted-foreground">
                         💡 <span class="italic">{{ q.explanation }}</span>
                     </p>
@@ -183,10 +232,24 @@ const restartQuiz = () => {
                 </div>
             </div>
 
+            <!-- Question Type Badge -->
+            <div class="mt-6 flex flex-wrap items-center gap-3">
+                <span class="inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-semibold"
+                    :class="currentTypeMeta.badgeClass">
+                    <AppIcon :name="currentTypeMeta.icon" class="h-3.5 w-3.5" :stroke-width="2.5" />
+                    {{ currentTypeMeta.label }}
+                </span>
+            </div>
+
             <!-- Question Text -->
-            <h2 class="mt-8 text-xl font-semibold leading-snug tracking-tight text-foreground sm:text-2xl">
+            <h2 class="mt-4 text-xl font-semibold leading-snug tracking-tight text-foreground sm:text-2xl">
                 {{ currentQuestion?.text }}
             </h2>
+
+            <!-- Helper Hint -->
+            <p v-if="currentTypeMeta.hint" class="mt-2 text-sm text-muted-foreground">
+                {{ currentTypeMeta.hint }}
+            </p>
 
             <!-- Answer Input Types -->
             <div class="mt-6 space-y-3">
