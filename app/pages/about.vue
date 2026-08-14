@@ -9,37 +9,37 @@ onMounted(() => {
 
 const features = [
     {
-        title: 'Import Anywhere',
-        description: 'Turn study material into a quiz using any external AI tool, then paste the JSON right in. No account, no friction.',
+        title: 'Paste → Play',
+        description: 'Ask any AI chatbot to turn your notes into a quiz, then paste the result straight into JustQuiz. It takes less than a minute.',
         icon: 'import',
     },
     {
-        title: 'Fully Offline',
-        description: 'Your quizzes live in your browser. No servers, no tracking, no account. Everything works even on a plane.',
+        title: 'Works anywhere, even offline',
+        description: 'Your quizzes are saved on your device, so you can study on the bus, in the library, or on a plane — with zero internet connection.',
         icon: 'offline',
     },
     {
-        title: 'Cross-Device',
-        description: 'Built as a progressive web app. Install it on your phone, use it on your laptop — your quizzes follow you.',
-        icon: 'devices',
+        title: 'Private by design',
+        description: 'No account, no tracking, no servers. Your quizzes never leave your browser unless you choose to back them up to your own Google Drive.',
+        icon: 'private',
     },
 ];
 
 const steps = [
     {
         number: '01',
-        title: 'Generate',
-        description: 'Ask any AI chatbot to create a quiz from your lecture PDF using the JustQuiz JSON format.',
+        title: 'Get your notes ready',
+        description: 'Copy any study material — lecture notes, a chapter, or your revision guide — into an AI chatbot. Grab the ready-made prompt on the Format page.',
     },
     {
         number: '02',
-        title: 'Import',
-        description: 'Paste the generated JSON into the app or upload a .json file. It validates and parses instantly.',
+        title: 'Generate a quiz',
+        description: 'Ask the AI to turn your notes into a quiz. It returns a single block of quiz data — just copy it all.',
     },
     {
         number: '03',
-        title: 'Practice',
-        description: 'Play your quiz with instant feedback, explanations, and a detailed score review at the end.',
+        title: 'Import & practice',
+        description: 'Paste it into JustQuiz and play. You get instant feedback, explanations, and a score review that shows exactly what to revise.',
     },
 ];
 </script>
@@ -55,23 +55,26 @@ const steps = [
                 <div class="space-y-8">
                     <div class="section-label fade-up">
                         <span class="section-label-dot" />
-                        <span class="font-mono text-xs uppercase tracking-[0.15em] text-accent">Quiz Tools · PWA · Offline</span>
+                        <span class="font-mono text-xs uppercase tracking-[0.15em] text-accent">Study Tool · PWA · 100% Offline</span>
                     </div>
 
                     <h1 class="font-display text-4xl leading-[1.1] tracking-tight text-foreground sm:text-5xl lg:text-6xl fade-up-delay-1">
-                        Study smarter with
+                        Turn your notes into
                         <span class="relative inline-block">
-                            <span class="gradient-text">beautiful quizzes</span>
+                            <span class="gradient-text">quizzes you'll actually want to study</span>
                             <span class="absolute -bottom-1 left-0 h-2 w-full rounded-sm bg-gradient-to-r from-accent/20 to-accent-secondary/10 sm:h-3" />
                         </span>
                     </h1>
 
                     <p class="max-w-lg text-lg leading-relaxed text-muted-foreground fade-up-delay-2">
-                        JustQuiz converts your study materials into clean, interactive quizzes — right in your browser. No accounts, no servers, no sign-up walls. Just you and your knowledge.
+                        JustQuiz turns your lecture notes, textbook chapters, or study guides into interactive quizzes — right in your browser. No account, no setup, no internet required.
                     </p>
 
                     <div class="flex flex-col gap-4 sm:flex-row fade-up-delay-3">
-                        <LaunchAppButton label="Install JustQuiz" class="h-12 px-8 text-base" />
+                        <NuxtLink to="/" class="btn-primary group h-12 px-8 text-base">
+                            Start studying
+                            <AppIcon name="lucide:arrow-right" class="h-4 w-4 transition-transform duration-200 group-hover:translate-x-1" :stroke-width="2.5" />
+                        </NuxtLink>
                         <a href="#how-it-works" class="btn-outline h-12 px-8 text-base">
                             How it works
                         </a>
@@ -150,9 +153,9 @@ const steps = [
                             <!-- Import icon -->
                             <AppIcon v-if="feature.icon === 'import'" name="lucide:download" class="h-7 w-7 text-white" />
                             <!-- Offline icon -->
-                            <AppIcon v-else-if="feature.icon === 'offline'" name="lucide:shield" class="h-7 w-7 text-white" />
-                            <!-- Devices icon -->
-                            <AppIcon v-else name="lucide:monitor" class="h-7 w-7 text-white" />
+                            <AppIcon v-else-if="feature.icon === 'offline'" name="lucide:wifi-off" class="h-7 w-7 text-white" />
+                            <!-- Privacy icon -->
+                            <AppIcon v-else name="lucide:shield" class="h-7 w-7 text-white" />
                         </div>
                         <h3 class="text-xl font-semibold tracking-tight text-foreground">{{ feature.title }}</h3>
                         <p class="mt-2 leading-relaxed text-muted-foreground">{{ feature.description }}</p>
@@ -171,10 +174,10 @@ const steps = [
                 <div class="mb-14 text-center">
                     <div class="section-label mb-5 !border-accent/40 !bg-accent/10">
                         <span class="section-label-dot" />
-                        <span class="font-mono text-xs uppercase tracking-[0.15em] text-accent-secondary dark:text-accent">How It Works</span>
+                        <span class="font-mono text-xs uppercase tracking-[0.15em] text-accent-secondary dark:text-accent">Getting Started</span>
                     </div>
                     <h2 class="font-display text-3xl leading-tight sm:text-4xl">
-                        Three steps to <span class="gradient-text dark:!to-accent">active recall</span>
+                        Three steps to <span class="gradient-text dark:!to-accent">your first quiz</span>
                     </h2>
                 </div>
 
@@ -205,13 +208,16 @@ const steps = [
                     <span class="font-mono text-xs uppercase tracking-[0.15em] text-accent">Get Started</span>
                 </div>
                 <h2 class="font-display text-3xl leading-tight text-foreground sm:text-5xl">
-                    Your next study session starts <span class="gradient-text">here</span>
+                    Your notes are already a quiz <span class="gradient-text">waiting to happen</span>
                 </h2>
                 <p class="mx-auto mt-4 max-w-xl text-lg leading-relaxed text-muted-foreground">
-                    Import a quiz, play it offline, and see your score instantly. It takes less than a minute to start.
+                    Copy a prompt, paste your notes, and start practicing in under a minute. No sign-up, no downloads.
                 </p>
                 <div class="mt-8">
-                    <LaunchAppButton label="Install JustQuiz" class="h-14 px-10 text-base" />
+                    <NuxtLink to="/" class="btn-primary group h-14 px-10 text-base">
+                        Start studying
+                        <AppIcon name="lucide:arrow-right" class="h-4 w-4 transition-transform duration-200 group-hover:translate-x-1" :stroke-width="2.5" />
+                    </NuxtLink>
                 </div>
             </div>
         </section>

@@ -90,16 +90,16 @@ const fieldDocs = [
     <div class="mb-10 space-y-4">
       <div class="section-label">
         <span class="section-label-dot" />
-        <span class="font-mono text-xs uppercase tracking-[0.15em] text-accent">JSON Format</span>
+        <span class="font-mono text-xs uppercase tracking-[0.15em] text-accent">Format Guide</span>
       </div>
 
       <div class="flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
         <div>
           <h1 class="font-display text-3xl tracking-tight text-foreground sm:text-4xl">
-            Quiz <span class="gradient-text">Schema</span>
+            Create a quiz with AI <span class="gradient-text">in 3 steps</span>
           </h1>
           <p class="mt-2 max-w-2xl text-muted-foreground">
-            Give this format to any AI chatbot to turn your notes into a quiz, then import the result.
+            You don't need to understand JSON to use JustQuiz. Copy the prompt below, add your notes, and the AI writes the quiz for you. JustQuiz checks everything when you import it.
           </p>
         </div>
 
@@ -116,11 +116,47 @@ const fieldDocs = [
       </div>
     </div>
 
-    <!-- Sample JSON -->
+    <!-- Quick Start -->
     <section class="space-y-4">
+      <h2 class="font-display text-2xl text-foreground">Quick start</h2>
+      <div class="grid gap-4 md:grid-cols-3">
+        <div class="card-surface p-5">
+          <div class="flex items-center gap-2">
+            <AppIcon name="lucide:copy" class="h-4 w-4 text-accent" :stroke-width="2.5" />
+            <h3 class="text-sm font-semibold text-foreground">1. Copy the AI prompt</h3>
+          </div>
+          <p class="mt-2 text-sm text-muted-foreground">
+            It already contains every rule JustQuiz needs — you just add your notes.
+          </p>
+        </div>
+
+        <div class="card-surface p-5">
+          <div class="flex items-center gap-2">
+            <AppIcon name="lucide:file-text" class="h-4 w-4 text-accent" :stroke-width="2.5" />
+            <h3 class="text-sm font-semibold text-foreground">2. Paste your notes</h3>
+          </div>
+          <p class="mt-2 text-sm text-muted-foreground">
+            Bullet points, headings, full paragraphs — messy notes are fine. The AI sorts them out.
+          </p>
+        </div>
+
+        <div class="card-surface p-5">
+          <div class="flex items-center gap-2">
+            <AppIcon name="lucide:download" class="h-4 w-4 text-accent" :stroke-width="2.5" />
+            <h3 class="text-sm font-semibold text-foreground">3. Import the result</h3>
+          </div>
+          <p class="mt-2 text-sm text-muted-foreground">
+            Copy the AI's reply and paste it into Import on your dashboard. That's it.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Sample JSON -->
+    <section class="mt-12 space-y-4">
       <h2 class="font-display text-2xl text-foreground">Full Example</h2>
       <p class="text-sm text-muted-foreground">
-        Paste this into the import modal to try it, or use it as a template when asking an AI to generate a quiz.
+        This is what a finished quiz looks like. Use it to try the import, or check it if the AI gets confused.
       </p>
       <pre class="overflow-x-auto rounded-xl border border-border bg-inverted-bg p-6 font-mono text-xs leading-relaxed text-inverted-fg shadow-lg"><code>{{ sampleJson }}</code></pre>
     </section>
@@ -132,40 +168,40 @@ const fieldDocs = [
         <div class="card-surface p-5">
           <div class="flex items-center gap-2">
             <AppIcon name="lucide:list-numbers" class="h-4 w-4 text-accent" :stroke-width="2.5" />
-            <h3 class="text-sm font-semibold text-foreground">Set the question count</h3>
+            <h3 class="text-sm font-semibold text-foreground">Ask for a set number</h3>
           </div>
           <p class="mt-2 text-sm text-muted-foreground">
-            Mention how many questions you want, e.g. <em class="not-italic">"make 10 questions from these notes."</em> If you don't, the AI picks a sensible number.
+            Try <em class="not-italic">"make 10 questions from these notes"</em> so you get one focused practice session.
           </p>
         </div>
 
         <div class="card-surface p-5">
           <div class="flex items-center gap-2">
             <AppIcon name="lucide:file-text" class="h-4 w-4 text-accent" :stroke-width="2.5" />
-            <h3 class="text-sm font-semibold text-foreground">Paste raw notes</h3>
+            <h3 class="text-sm font-semibold text-foreground">Messy notes are fine</h3>
           </div>
           <p class="mt-2 text-sm text-muted-foreground">
-            Notes can be bullet points, headings, or full paragraphs — the AI extracts the key concepts.
+            Paste your raw notes as-is — bullet points, headings, paragraphs. The AI picks out the key ideas.
           </p>
         </div>
 
         <div class="card-surface p-5">
           <div class="flex items-center gap-2">
             <AppIcon name="lucide:target" class="h-4 w-4 text-accent" :stroke-width="2.5" />
-            <h3 class="text-sm font-semibold text-foreground">Keep it focused</h3>
+            <h3 class="text-sm font-semibold text-foreground">One topic per quiz</h3>
           </div>
           <p class="mt-2 text-sm text-muted-foreground">
-            One subject per quiz gives better, more consistent questions.
+            A quiz on "Photosynthesis" beats a quiz on "All of Biology" every time.
           </p>
         </div>
 
         <div class="card-surface p-5">
           <div class="flex items-center gap-2">
             <AppIcon name="lucide:clipboard" class="h-4 w-4 text-accent" :stroke-width="2.5" />
-            <h3 class="text-sm font-semibold text-foreground">Copy AI Prompt handles the details</h3>
+            <h3 class="text-sm font-semibold text-foreground">Just hit Copy</h3>
           </div>
           <p class="mt-2 text-sm text-muted-foreground">
-            The prompt already contains all format rules — just replace the NOTES section with your content.
+            The copied prompt contains every format rule — you never have to write JSON yourself.
           </p>
         </div>
       </div>
@@ -173,7 +209,7 @@ const fieldDocs = [
 
     <!-- Top-level fields -->
     <section class="mt-12 space-y-4">
-      <h2 class="font-display text-2xl text-foreground">Top-Level Fields</h2>
+      <h2 class="font-display text-2xl text-foreground">Under the hood <span class="text-base font-normal text-muted-foreground">(only if you're curious)</span></h2>
       <div class="overflow-hidden rounded-xl border border-border bg-card shadow-md">
         <table class="w-full text-left text-sm">
           <thead class="border-b border-border bg-muted/50 text-xs uppercase tracking-wider text-muted-foreground">
@@ -203,7 +239,7 @@ const fieldDocs = [
 
     <!-- Question types -->
     <section class="mt-12 space-y-4">
-      <h2 class="font-display text-2xl text-foreground">Question Types</h2>
+      <h2 class="font-display text-2xl text-foreground">Question types you can use</h2>
       <p class="text-sm text-muted-foreground">
         Each element in <code class="font-mono text-xs text-accent">questions[]</code> must set a valid type (or omit it to default to <code class="font-mono text-xs text-accent">single</code>).
       </p>
@@ -230,9 +266,9 @@ const fieldDocs = [
           <AppIcon name="lucide:check-check" class="h-4 w-4 text-white" :stroke-width="2.5" />
         </span>
         <div>
-          <h2 class="font-display text-lg text-foreground">Validation</h2>
+          <h2 class="font-display text-lg text-foreground">Import is always safe</h2>
           <p class="mt-1 text-sm leading-relaxed text-muted-foreground">
-            The import modal validates every question before saving: required fields, valid types, at least 2 choices for choice-based questions, and correct-answer indices within range. If something is wrong, you'll see a clear message and nothing gets saved.
+            JustQuiz double-checks every quiz before saving it — required fields, valid question types, and correct answers that point to real choices. If something doesn't look right, you'll get a clear message and nothing gets saved.
           </p>
         </div>
       </div>
