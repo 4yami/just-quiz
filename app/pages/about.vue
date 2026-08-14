@@ -1,5 +1,12 @@
 <!-- app/pages/about.vue -->
 <script setup lang="ts">
+const { markVisited } = useFirstVisit();
+
+onMounted(() => {
+  // Mark the visit immediately — returning users should go straight to the dashboard.
+  markVisited();
+});
+
 const features = [
     {
         title: 'Import Anywhere',

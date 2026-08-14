@@ -4,6 +4,7 @@ import type { Quiz } from '~/types/quiz';
 
 const { getAllQuizzes, deleteQuiz, upsertImportedQuiz } = useQuizDb();
 const { isSignedIn, isSaving, isLoading, signIn, saveAllToDrive, loadAllQuizzesFromDrive } = useGoogleDrive();
+const { isFirstVisit, checkFirstVisit } = useFirstVisit();
 
 const quizzes = ref<Quiz[]>([]);
 const isImportOpen = ref(false);
@@ -153,6 +154,14 @@ const handleClickOutside = (event: MouseEvent) => {
 
 onMounted(() => {
   document.addEventListener('click', handleClickOutside);
+
+  // Guide first-time users to the About/onboarding page before showing the dashboard.
+  checkFirstVisit();
+  if (isFirstVisit.value) {
+    navigateTo('/about');
+    return;
+  }
+
   loadQuizzes();
 });
 
