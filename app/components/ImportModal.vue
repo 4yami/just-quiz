@@ -7,12 +7,29 @@ const { saveImportedQuiz } = useQuizDb();
 
 const rawJson = ref('');
 const errorMessage = ref('');
+const validationErrors = ref<string[]>([]);
 const copiedPrompt = ref(false);
 const fileInput = ref<HTMLInputElement | null>(null);
+const showFormatGuide = ref(false);
+
+const FORMAT_GUIDE_EXAMPLE = {
+  title: 'Quiz Title',
+  questions: [
+    {
+      type: 'single',
+      text: 'Question wording — what you ask the player',
+      choices: ['Option A', 'Option B', 'Option C'],
+      correctIndices: [0],
+      explanation: 'Why this answer is correct (optional)'
+    }
+  ]
+};
+const FORMAT_GUIDE_JSON = JSON.stringify(FORMAT_GUIDE_EXAMPLE, null, 2);
 
 const loadSample = () => {
   rawJson.value = JSON.stringify(SAMPLE_QUIZ_JSON, null, 2);
   errorMessage.value = '';
+  validationErrors.value = [];
 };
 
 const copyAiPrompt = async () => {
@@ -26,9 +43,11 @@ const readFileAsText = (file: File) => {
   reader.onload = () => {
     rawJson.value = String(reader.result || '');
     errorMessage.value = '';
+    validationErrors.value = [];
   };
   reader.onerror = () => {
     errorMessage.value = 'Could not read the file. Please try again.';
+    validationErrors.value = [];
   };
   reader.readAsText(file);
 };
@@ -47,6 +66,7 @@ const handleFileDrop = (e: DragEvent) => {
 
 const handleImport = async () => {
   errorMessage.value = '';
+  validationErrors.value = [];
   const result = parseQuizJson(rawJson.value);
 
   if (!result.ok) {
@@ -57,7 +77,8 @@ const handleImport = async () => {
   const validation = validateQuizJson(result.data);
 
   if (!validation.valid) {
-    errorMessage.value = validation.errors[0] || 'Invalid quiz format.';
+    validationErrors.value =
+      validation.errors.length > 0 ? validation.errors : ['Invalid quiz format.'];
     return;
   }
 
@@ -123,6 +144,30 @@ const handleImport = async () => {
         <button @click="loadSample" class="btn-ghost text-xs">
           Load sample
         </button>
+        <button @click="showFormatGuide = !showFormatGuide" class="btn-ghost text-xs">
+          <AppIcon name="lucide:info" class="h-3.5 w-3.5" />
+          {{ showFormatGuide ? 'Hide format guide' : 'Format guide' }}
+        </button>
+      </div>
+
+      <div v-if="showFormatGuide" class="rounded-xl border border-border bg-muted/30 p-4">
+        <p class="mb-2 text-xs font-medium text-muted-foreground">
+          Every question in "questions" needs a "text" field — the question wording itself. Example:
+        </p>
+        <pre class="overflow-x-auto font-mono text-xs leading-relaxed text-foreground">{{ FORMAT_GUIDE_JSON }}</pre>
+      </div>
+
+      <div
+        v-if="validationErrors.length"
+        class="max-h-40 space-y-1 overflow-y-auto rounded-xl border border-red-600/30 bg-red-600/5 p-3 text-sm text-red-600 dark:text-red-400"
+      >
+        <p class="flex items-center gap-2 font-medium">
+          <AppIcon name="lucide:info" class="h-4 w-4 shrink-0" />
+          Fix these issues:
+        </p>
+        <ul class="ml-6 list-disc space-y-1">
+          <li v-for="err in validationErrors" :key="err">{{ err }}</li>
+        </ul>
       </div>
 
       <p v-if="errorMessage" class="flex items-center gap-2 text-sm font-medium text-red-600 dark:text-red-400">
