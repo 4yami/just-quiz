@@ -34,7 +34,7 @@ const handleSignOut = () => {
           Keep your quizzes <span class="gradient-text">safe</span>
         </h1>
         <p class="mt-2 max-w-2xl text-muted-foreground">
-          Your quizzes are saved on this device automatically. Connecting Google Drive gives you a one-click backup — and an easy way to take your quizzes with you to another phone or laptop.
+          Your quizzes are saved on this device automatically. Connecting Google Drive gives you a one-click backup, plus an easy way to take your quizzes with you to another phone or laptop.
         </p>
       </div>
     </div>
@@ -87,13 +87,13 @@ const handleSignOut = () => {
           <span class="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-accent/10">
             <AppIcon name="lucide:download" class="h-4 w-4 text-accent" :stroke-width="2.5" />
           </span>
-          <span><strong class="font-semibold text-foreground">Move to another device.</strong> Sign in on your phone or laptop, click Load Files, and your quizzes appear — they merge with anything you already have.</span>
+          <span><strong class="font-semibold text-foreground">Move to another device.</strong> Sign in on your phone or laptop, click Load Files, and your quizzes appear there, merged with anything you already have.</span>
         </li>
         <li class="flex items-start gap-3">
           <span class="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-accent/10">
             <AppIcon name="lucide:shield" class="h-4 w-4 text-accent" :stroke-width="2.5" />
           </span>
-          <span><strong class="font-semibold text-foreground">It stays private.</strong> JustQuiz only sees the files inside its own folder. Your other Drive files are never touched — and no separate account is created with JustQuiz itself.</span>
+          <span><strong class="font-semibold text-foreground">It stays private.</strong> JustQuiz only sees the files inside its own folder. Your other Drive files are never touched, and no separate account is created with JustQuiz itself.</span>
         </li>
       </ul>
     </section>

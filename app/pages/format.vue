@@ -126,7 +126,7 @@ const fieldDocs = [
             <h3 class="text-sm font-semibold text-foreground">1. Copy the AI prompt</h3>
           </div>
           <p class="mt-2 text-sm text-muted-foreground">
-            It already contains every rule JustQuiz needs — you just add your notes.
+            It already contains every rule JustQuiz needs. You just add your notes.
           </p>
         </div>
 
@@ -136,7 +136,7 @@ const fieldDocs = [
             <h3 class="text-sm font-semibold text-foreground">2. Paste your notes</h3>
           </div>
           <p class="mt-2 text-sm text-muted-foreground">
-            Bullet points, headings, full paragraphs — messy notes are fine. The AI sorts them out.
+            Bullet points, headings, full paragraphs. Messy notes are fine. The AI sorts them out.
           </p>
         </div>
 
@@ -181,7 +181,7 @@ const fieldDocs = [
             <h3 class="text-sm font-semibold text-foreground">Messy notes are fine</h3>
           </div>
           <p class="mt-2 text-sm text-muted-foreground">
-            Paste your raw notes as-is — bullet points, headings, paragraphs. The AI picks out the key ideas.
+            Paste your raw notes as-is. Bullet points, headings, paragraphs. The AI picks out the key ideas.
           </p>
         </div>
 
@@ -201,7 +201,7 @@ const fieldDocs = [
             <h3 class="text-sm font-semibold text-foreground">Just hit Copy</h3>
           </div>
           <p class="mt-2 text-sm text-muted-foreground">
-            The copied prompt contains every format rule — you never have to write JSON yourself.
+            The copied prompt contains every format rule. You never have to write JSON yourself.
           </p>
         </div>
       </div>
@@ -268,7 +268,7 @@ const fieldDocs = [
         <div>
           <h2 class="font-display text-lg text-foreground">Import is always safe</h2>
           <p class="mt-1 text-sm leading-relaxed text-muted-foreground">
-            JustQuiz double-checks every quiz before saving it — required fields, valid question types, and correct answers that point to real choices. If something doesn't look right, you'll get a clear message and nothing gets saved.
+            JustQuiz double-checks every quiz before saving it. It verifies required fields, valid question types, and correct answers that point to real choices. If something doesn't look right, you'll get a clear message and nothing gets saved.
           </p>
         </div>
       </div>

@@ -109,7 +109,7 @@ const handleClick = async () => {
             <li class="flex items-start gap-3">
               <span class="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-accent/10 text-sm font-bold text-accent">3</span>
               <div class="text-sm leading-relaxed text-muted-foreground">
-                Tap <span class="rounded-md bg-muted px-1.5 py-0.5 font-medium text-foreground">Add</span> — JustQuiz will appear on your home screen.
+                Tap <span class="rounded-md bg-muted px-1.5 py-0.5 font-medium text-foreground">Add</span>. JustQuiz will appear on your home screen.
               </div>
             </li>
           </ol>

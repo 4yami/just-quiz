@@ -314,7 +314,7 @@ const buildFriendlyError = (text: string, lastError: unknown): string => {
       hint = 'It starts with a double quote, so the JSON got wrapped in quotation marks. In ChatGPT, tap "Copy code" on the JSON block instead of copying the whole message.';
       break;
     case '{':
-      hint = 'It starts with "{" but something inside is invalid — likely a stray or unescaped quote inside a string value. Try regenerating the quiz.';
+      hint = 'It starts with "{" but something inside is invalid. Likely a stray or unescaped quote inside a string value. Try regenerating the quiz.';
       break;
     case '[':
       hint = 'It starts with "[", but a quiz must be a single JSON object { ... }, not an array.';
@@ -323,7 +323,7 @@ const buildFriendlyError = (text: string, lastError: unknown): string => {
       hint = 'The text is empty.';
       break;
     default:
-      hint = `It starts with "${firstChar}" — expected "{". In ChatGPT, use "Copy code" on the JSON block, not "Copy message".`;
+      hint = `It starts with "${firstChar}", but expected "{". In ChatGPT, use "Copy code" on the JSON block, not "Copy message".`;
   }
 
   return `Invalid JSON${pos}: ${msg}. ${hint} Preview: "${snippet}${trimmed.length > 60 ? '…' : ''}"`;
@@ -333,7 +333,7 @@ export const parseQuizJson = (raw: string): JsonParseResult => {
   const text = normalizeSafe(raw);
 
   if (!text) {
-    return { ok: false, error: 'Empty input — paste or drop a quiz JSON file first.' };
+    return { ok: false, error: 'Empty input. Paste or drop a quiz JSON file first.' };
   }
 
   // Ordered recovery pipeline. Attempts run from least to most aggressive;

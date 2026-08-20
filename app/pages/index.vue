@@ -286,8 +286,8 @@ onBeforeUnmount(() => {
           class="w-full appearance-none rounded-xl border border-border bg-card py-2.5 pl-10 pr-9 text-sm text-foreground outline-none transition-all duration-200 focus:border-accent/50 focus:ring-2 focus:ring-accent/20">
           <option value="updated_desc">Newest first</option>
           <option value="created_asc">Oldest first</option>
-          <option value="title_asc">Title A–Z</option>
-          <option value="title_desc">Title Z–A</option>
+          <option value="title_asc">Title A-Z</option>
+          <option value="title_desc">Title Z-A</option>
           <option value="questions_desc">Most questions</option>
           <option value="questions_asc">Least questions</option>
         </select>

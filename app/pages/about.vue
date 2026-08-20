@@ -15,12 +15,12 @@ const features = [
     },
     {
         title: 'Works anywhere, even offline',
-        description: 'Your quizzes are saved on your device, so you can study on the bus, in the library, or on a plane — with zero internet connection.',
+        description: 'Your quizzes are saved on your device, so you can study on the bus, in the library, or on a plane with zero internet connection.',
         icon: 'offline',
     },
     {
         title: 'Private by design',
-        description: 'No account, no tracking, no servers. Your quizzes never leave your browser unless you choose to back them up to your own Google Drive.',
+        description: 'No account or servers. Your quizzes never leave your browser unless you choose to back them up to your own Google Drive.',
         icon: 'private',
     },
 ];
@@ -29,17 +29,17 @@ const steps = [
     {
         number: '01',
         title: 'Get your notes ready',
-        description: 'Copy any study material — lecture notes, a chapter, or your revision guide — into an AI chatbot. Grab the ready-made prompt on the Format page.',
+        description: 'Copy any study material, like lecture notes, a chapter, or your revision guide, into an AI chatbot. Grab the ready-made prompt on the Format page.',
     },
     {
         number: '02',
         title: 'Generate a quiz',
-        description: 'Ask the AI to turn your notes into a quiz. It returns a single block of quiz data — just copy it all.',
+        description: 'Ask the AI to turn your notes into a quiz. It returns one block of quiz data. Just copy it all.',
     },
     {
         number: '03',
         title: 'Import & practice',
-        description: 'Paste it into JustQuiz and play. You get instant feedback, explanations, and a score review that shows exactly what to revise.',
+        description: 'Paste it into JustQuiz and play. You get instant feedback, explanations, and a score review that shows what to revise.',
     },
 ];
 </script>
@@ -61,13 +61,13 @@ const steps = [
                     <h1 class="font-display text-4xl leading-[1.1] tracking-tight text-foreground sm:text-5xl lg:text-6xl fade-up-delay-1">
                         Turn your notes into
                         <span class="relative inline-block">
-                            <span class="gradient-text">quizzes you'll actually want to study</span>
+                            <span class="gradient-text">quizzes you'll want to study</span>
                             <span class="absolute -bottom-1 left-0 h-2 w-full rounded-sm bg-gradient-to-r from-accent/20 to-accent-secondary/10 sm:h-3" />
                         </span>
                     </h1>
 
                     <p class="max-w-lg text-lg leading-relaxed text-muted-foreground fade-up-delay-2">
-                        JustQuiz turns your lecture notes, textbook chapters, or study guides into interactive quizzes — right in your browser. No account, no setup, no internet required.
+                        JustQuiz turns your lecture notes, textbook chapters, or study guides into interactive quizzes right in your browser. No account, no setup, no internet required.
                     </p>
 
                     <div class="flex flex-col gap-4 sm:flex-row fade-up-delay-3">
@@ -141,8 +141,8 @@ const steps = [
                         <span class="font-mono text-xs uppercase tracking-[0.15em] text-accent">Why JustQuiz</span>
                     </div>
                     <h2 class="font-display text-3xl leading-tight text-foreground sm:text-4xl">
-                        Everything you need.
-                        <span class="gradient-text">Nothing you don't.</span>
+                        Nothing extra.
+                        <span class="gradient-text">Just the features that matter.</span>
                     </h2>
                 </div>
 
@@ -208,7 +208,7 @@ const steps = [
                     <span class="font-mono text-xs uppercase tracking-[0.15em] text-accent">Get Started</span>
                 </div>
                 <h2 class="font-display text-3xl leading-tight text-foreground sm:text-5xl">
-                    Your notes are already a quiz <span class="gradient-text">waiting to happen</span>
+                    Get a quiz from your notes <span class="gradient-text">in under a minute</span>
                 </h2>
                 <p class="mx-auto mt-4 max-w-xl text-lg leading-relaxed text-muted-foreground">
                     Copy a prompt, paste your notes, and start practicing in under a minute. No sign-up, no downloads.
